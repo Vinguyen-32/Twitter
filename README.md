@@ -32,9 +32,9 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://user-images.githubusercontent.com/65844160/110198698-3392db80-7e09-11eb-836b-66712d18b69a.gif' />
+<img src='https://user-images.githubusercontent.com/65844160/110200446-fb909600-7e12-11eb-924d-bd05ab99a876.gif' />
 
-GIF created with [LiceCap](https://user-images.githubusercontent.com/65844160/110198698-3392db80-7e09-11eb-836b-66712d18b69a.gif).
+GIF created with [LiceCap](https://user-images.githubusercontent.com/65844160/110200446-fb909600-7e12-11eb-924d-bd05ab99a876.gif).
 
 ## Notes
 
