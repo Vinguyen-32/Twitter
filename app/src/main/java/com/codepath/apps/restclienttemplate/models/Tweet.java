@@ -29,4 +29,7 @@ public class Tweet {
         }
         return tweets;
     }
+    public String getFormattedTimestamp() {
+        return TimeFormatter.getTimeDifference(createAt);
+    }
 }
