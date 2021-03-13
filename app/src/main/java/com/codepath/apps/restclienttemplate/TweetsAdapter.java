@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.squareup.picasso.Picasso;
+
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
     Context context;
@@ -64,6 +75,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivProfileImage;
+        ImageView postImage;
         TextView tvBody;
         TextView tvScreenName;
         TextView tvTimestamp;
@@ -71,6 +83,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
+            postImage = itemView.findViewById(R.id.postImage);
             tvBody = itemView.findViewById(R.id.tvBody);
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
@@ -79,8 +92,49 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public void bind(Tweet tweet) {
             tvBody.setText(tweet.body);
             tvScreenName.setText(tweet.user.screenName);
-            Glide.with(context).load(tweet.user.profileImageUrl).into(ivProfileImage);
+            Glide.with(context)
+                    .load(tweet.user.profileImageUrl)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(16)))
+                    .into(ivProfileImage);
             tvTimestamp.setText(tweet.getFormattedTimestamp());
+
+            class RetrieveOGImageTask extends AsyncTask<String, Void, String> {
+
+                private Exception exception;
+
+                protected String doInBackground(String... urls) {
+                    try {
+                        Connection con = Jsoup.connect(urls[0]);
+                        Document doc = con.get();
+
+                        String imageUrl = null;
+                        Elements metaOgImage = doc.select("meta[property=og:image]");
+                        if (metaOgImage != null) {
+                            imageUrl = metaOgImage.attr("content");
+                        }
+                        return imageUrl;
+                    } catch (Exception e) {
+                        this.exception = e;
+                        return null;
+                    }
+                }
+
+                protected void onPostExecute(String url) {
+                    if (url != null && url != ""){
+                        Picasso.get()
+                                .load(url)
+                                .transform(new RoundedCornersTransformation(30, 30))
+                                .into(postImage);
+                    }
+                }
+            }
+
+            try {
+//                new RetrieveOGImageTask().execute(tweet.source);
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
         }
     }
 }

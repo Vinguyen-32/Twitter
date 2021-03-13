@@ -1,17 +1,29 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import android.os.AsyncTask;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Parcel
 public class Tweet {
     public String body;
     public String createAt;
     public long id;
     public User user;
+    public String source;
+
+    // empty constructor needed by the Parceler library
+    public Tweet() {}
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
@@ -19,6 +31,11 @@ public class Tweet {
         tweet.createAt = jsonObject.getString("created_at");
         tweet.id = jsonObject.getLong("id");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
+
+        JSONArray urls  = jsonObject.getJSONObject("entities").getJSONArray("urls");
+        if (urls.length() > 0) {
+            tweet.source = urls.getJSONObject(0).getString("expanded_url");
+        }
         return tweet;
     }
 
@@ -29,6 +46,7 @@ public class Tweet {
         }
         return tweets;
     }
+
     public String getFormattedTimestamp() {
         return TimeFormatter.getTimeDifference(createAt);
     }

@@ -14,6 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
+        android:outlineProvider="bounds"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -23,8 +24,12 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="5dp"
         android:layout_marginTop="0dp"
+        android:inputType="textNoSuggestions"
         android:layout_toEndOf="@+id/ivProfileImage"
+        android:capitalize="none"
         android:text="TextView"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
         tools:text="vinguyen32" />
 
     <TextView
@@ -35,6 +40,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
+        android:textColor="@android:color/background_dark"
         tools:text="My first time to post a tweet" />
 
     <TextView
@@ -45,6 +51,25 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
+        android:textStyle="bold"
         tools:text="59m" />
 
+    <ImageView
+        android:id="@+id/postImage"
+        android:layout_width="354dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBody"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="-2dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="0dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:paddingBottom="20dp"
+        android:layout_below="@+id/postImage"
+        android:background="@android:color/darker_gray"/>
 </RelativeLayout>
